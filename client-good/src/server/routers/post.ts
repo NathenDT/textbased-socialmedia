@@ -110,7 +110,7 @@ const post = router({
           createdAt: post.createdAt.toISOString(),
           commentCount: 0,
           likeCount: post._count.likes,
-          likedByMe: post.likes.length > 0,
+          likedByMe: auth0Id ? post.likes.length > 0 : false,
         }
       })
 
@@ -158,7 +158,7 @@ const post = router({
           createdAt: post.createdAt.toISOString(),
           commentCount: 0,
           likeCount: post._count.likes,
-          likedByMe: post.likes.length > 0,
+          likedByMe: auth0Id ? post.likes.length > 0 : false,
         }
       })
 
@@ -213,7 +213,7 @@ const post = router({
           createdAt: post.createdAt.toISOString(),
           commentCount: 0,
           likeCount: post._count.likes,
-          likedByMe: post.likes.length > 0,
+          likedByMe: auth0Id ? post.likes.length > 0 : false,
         }
       })
 
