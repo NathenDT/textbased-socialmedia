@@ -1,28 +1,32 @@
-import React, { useState, useRef } from 'react'
+import React, { useRef, useCallback, useLayoutEffect } from 'react'
 
 type Props = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
   className?: string
 }
 
-export default function TextArea({ className, ...rest }: Props) {
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const [height, setHeight] = useState<number | null>(null)
+export default function TextArea({ className, value, ...rest }: Props) {
+  const textAreaRef = useRef<HTMLTextAreaElement>()
+  const inputRef = useCallback((textArea: HTMLTextAreaElement) => {
+    updateTextAreaSize(textArea)
+    textAreaRef.current = textArea
+  }, [])
 
-  const handleInput = () => {
-    const textarea = textareaRef.current
-    if (textarea) {
-      textarea.style.height = 'auto'
-      setHeight(textarea.scrollHeight)
-    }
-  }
+  useLayoutEffect(() => {
+    updateTextAreaSize(textAreaRef.current)
+  }, [value])
 
   return (
     <textarea
-      ref={textareaRef}
+      ref={inputRef}
+      value={value}
       className={`resize-none border rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
-      style={{ height: height ? `${height}px` : 'auto' }}
       {...rest}
-      onInput={handleInput}
     />
   )
+}
+
+function updateTextAreaSize(textArea?: HTMLTextAreaElement) {
+  if (textArea == null) return
+  textArea.style.height = 'auto'
+  textArea.style.height = `${textArea.scrollHeight}px`
 }

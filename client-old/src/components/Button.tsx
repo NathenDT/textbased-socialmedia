@@ -26,7 +26,7 @@ export default function Button({
 
   if (href) {
     return (
-      <button className={_className} disabled={disabled} {...rest}>
+      <button className={_className} {...rest}>
         <Link href={href}>{children}</Link>
       </button>
     )

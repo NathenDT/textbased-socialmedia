@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 type Props = React.HTMLProps<HTMLDivElement> & {
   username: string
@@ -12,6 +12,13 @@ export default function Avatar({
   className,
   ...rest
 }: Props) {
+  const router = useRouter()
+
+  const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.stopPropagation()
+    router.push('/@' + username)
+  }
+
   return (
     <div
       className={
@@ -22,11 +29,11 @@ export default function Avatar({
         width: size + 'em',
         height: size + 'em',
       }}
-      onClick={(e) => e.stopPropagation()}
+      onClick={handleClick}
       {...rest}
     >
       <span style={{ fontSize: size / 2 + 'em' }}>
-        <Link href={'/user/' + username}>{username[0].toUpperCase()}</Link>
+        {username[0].toUpperCase()}
       </span>
     </div>
   )
