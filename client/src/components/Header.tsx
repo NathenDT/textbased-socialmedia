@@ -49,8 +49,8 @@ function Profile({ auth0Id }: ProfileProps) {
     return <Avatar loading className="m-2" />
 
   return (
-    <Menu as="div">
-      <Menu.Button>
+    <Menu as="div" className="relative inline-block">
+      <Menu.Button className="inline-flex ">
         <Avatar
           username={data.user.username}
           onClick={() => {}}
