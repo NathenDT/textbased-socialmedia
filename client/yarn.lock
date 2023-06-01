@@ -81,6 +81,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@headlessui/react@npm:^1.7.14":
+  version: 1.7.14
+  resolution: "@headlessui/react@npm:1.7.14"
+  dependencies:
+    client-only: ^0.0.1
+  peerDependencies:
+    react: ^16 || ^17 || ^18
+    react-dom: ^16 || ^17 || ^18
+  checksum: 9122114d7a618877a8da2ada000422ce82e6af47195e414076fa5cf45687709479eb30b0df414eed52079be6e5904151bc92e4acfafbdde2592c608f015c490e
+  languageName: node
+  linkType: hard
+
 "@jridgewell/gen-mapping@npm:^0.3.2":
   version: 0.3.3
   resolution: "@jridgewell/gen-mapping@npm:0.3.3"
@@ -283,30 +295,30 @@ __metadata:
   linkType: hard
 
 "@prisma/client@npm:^4.14.1":
-  version: 4.14.1
-  resolution: "@prisma/client@npm:4.14.1"
+  version: 4.15.0
+  resolution: "@prisma/client@npm:4.15.0"
   dependencies:
-    "@prisma/engines-version": 4.14.0-67.d9a4c5988f480fa576d43970d5a23641aa77bc9c
+    "@prisma/engines-version": 4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944
   peerDependencies:
     prisma: "*"
   peerDependenciesMeta:
     prisma:
       optional: true
-  checksum: 24d0696cfb714f50ef95eab87f260c06402b255eff529d3fbd6ae0752a42df8f63b18f5268d9b2c47261a7316299b16b6fc4079b725750eb951b4dde5ddb1d16
+  checksum: 875eb31e702e16a50188f4762d9689a930aeb4f18a158a0a5270feefc80dc9a30935890df65d98fc9c6655d5f4f65d9943997bb86a51dd904577e7d19c6a2a7c
   languageName: node
   linkType: hard
 
-"@prisma/engines-version@npm:4.14.0-67.d9a4c5988f480fa576d43970d5a23641aa77bc9c":
-  version: 4.14.0-67.d9a4c5988f480fa576d43970d5a23641aa77bc9c
-  resolution: "@prisma/engines-version@npm:4.14.0-67.d9a4c5988f480fa576d43970d5a23641aa77bc9c"
-  checksum: 0df2c9e7434ced708a202cb572e5cf433aae55332819700edb394b7d9c29742a6d2fd65abb778e80f9b1cc1f90daae5e331f4acd070bed395982856ff5ceccee
+"@prisma/engines-version@npm:4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944":
+  version: 4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944
+  resolution: "@prisma/engines-version@npm:4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944"
+  checksum: 6da6f076746aac2db043a9f15790f51c6d0e86139e1ebd83e6e046e799c0dbfa0d2df14cd7c70cc9583ce85b4bfc02e48fe1461077b79ed31ba83ad9440bb90f
   languageName: node
   linkType: hard
 
-"@prisma/engines@npm:4.14.1":
-  version: 4.14.1
-  resolution: "@prisma/engines@npm:4.14.1"
-  checksum: 9c6af9b98303b408b667b69653fd7b2eaa2c28775cf4c2559c51e3dfa161b4104deb41222d3b2fc33fd28ab255a633a9a9c0234d2d5b2b031f9fc1e715befc83
+"@prisma/engines@npm:4.15.0":
+  version: 4.15.0
+  resolution: "@prisma/engines@npm:4.15.0"
+  checksum: 61b53fe5ad7b0927de9aa4f51027e281788258d3fb5e389c3ae940829fdc5428a7108ce0cae5b329ddac0ee3206b0b9f8e8adae401c456f77d912c96368cfa5f
   languageName: node
   linkType: hard
 
@@ -350,8 +362,8 @@ __metadata:
   linkType: hard
 
 "@tanstack/react-query@npm:^4.29.11":
-  version: 4.29.11
-  resolution: "@tanstack/react-query@npm:4.29.11"
+  version: 4.29.12
+  resolution: "@tanstack/react-query@npm:4.29.12"
   dependencies:
     "@tanstack/query-core": 4.29.11
     use-sync-external-store: ^1.2.0
@@ -364,7 +376,7 @@ __metadata:
       optional: true
     react-native:
       optional: true
-  checksum: 94730795d1dfb2a8f76a33de4b65200bd983aa1f5ab0b3e645b6316479c69a5650efb0b7142056f31d657bae12c01eb43c79fae807bf9be86a00d650f86f6d34
+  checksum: aea231af648688c5eafdbbda0667034221cca8b77e00690ab54950b7cc0296d14646931aee44fc5f18d5ce4d683b5d234b053eed5c0a5c340bbbacdab873a70b
   languageName: node
   linkType: hard
 
@@ -376,48 +388,48 @@ __metadata:
   linkType: hard
 
 "@trpc/client@npm:^10.28.0":
-  version: 10.28.0
-  resolution: "@trpc/client@npm:10.28.0"
+  version: 10.28.2
+  resolution: "@trpc/client@npm:10.28.2"
   peerDependencies:
-    "@trpc/server": 10.28.0
-  checksum: e0070caa81ec8247683a1d52071671683d8cc4ddf8bffaa72e01c44b24868a407fa69da2e2c43999ea1ddc79257f717c1b4bb002f956b3b88722818eaba80d43
+    "@trpc/server": 10.28.2
+  checksum: 0461daa5a1e256dd81e959c36b14a05125ea21b06b5506106d45e0b0d80fef46ca5de4feffb1003f24eb0ddbcb83b929ce4f1260f228d7185a6c54b0100e0600
   languageName: node
   linkType: hard
 
 "@trpc/next@npm:^10.28.0":
-  version: 10.28.0
-  resolution: "@trpc/next@npm:10.28.0"
+  version: 10.28.2
+  resolution: "@trpc/next@npm:10.28.2"
   dependencies:
     react-ssr-prepass: ^1.5.0
   peerDependencies:
     "@tanstack/react-query": ^4.18.0
-    "@trpc/client": 10.28.0
-    "@trpc/react-query": 10.28.0
-    "@trpc/server": 10.28.0
+    "@trpc/client": 10.28.2
+    "@trpc/react-query": 10.28.2
+    "@trpc/server": 10.28.2
     next: "*"
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: a06e10c451dae78cf052dc0214186d2db41a4c3deb6d48aa8d12b4a762f96f35fe76230a3b148fdfc36f189476abe9bce00b363e023f66ed185d6643d236c071
+  checksum: e3796e161a2138426430851b86e5870c48eaae951defe085e5f25c42a3576bb1faed14ffa7dba281196ec91bf7f0a020a21affd738a70f3725b8c40f8fccd1e6
   languageName: node
   linkType: hard
 
 "@trpc/react-query@npm:^10.28.0":
-  version: 10.28.0
-  resolution: "@trpc/react-query@npm:10.28.0"
+  version: 10.28.2
+  resolution: "@trpc/react-query@npm:10.28.2"
   peerDependencies:
     "@tanstack/react-query": ^4.18.0
-    "@trpc/client": 10.28.0
-    "@trpc/server": 10.28.0
+    "@trpc/client": 10.28.2
+    "@trpc/server": 10.28.2
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: af8ed46ffd4945da3dc17d4bc3a55d7cd424670c93e393db3a574a14de979146ab480350219f394a8e81b4c93674b78dab4aab52f5b137345bcba98ad4b1f13d
+  checksum: 5f78b24a62100cf14508105ec4594e37f5591408c88a0ab2e50baae17c68d6dde3308c8bff52360ac127f1954fc8e65f6e423ea5582c42de903c84167e1064cb
   languageName: node
   linkType: hard
 
 "@trpc/server@npm:^10.28.0":
-  version: 10.28.0
-  resolution: "@trpc/server@npm:10.28.0"
-  checksum: ec1d08c2064b1664ef4869592f5fdea5de683e8dfcd8bcf05cd30200f219103fe2da72956e43faaff8c5220a5e728eecd09d99352651576436b678d3b9929aa4
+  version: 10.28.2
+  resolution: "@trpc/server@npm:10.28.2"
+  checksum: a9b69ba7e4a73d277743b42c27c5be6d320d5d6656462d69c1b1a5a7fd1fbd2d8740d34b49248508744bd9f52e881f5b5601024321ef030b4a64d024ba8be326
   languageName: node
   linkType: hard
 
@@ -772,8 +784,8 @@ __metadata:
   linkType: hard
 
 "browserslist@npm:^4.21.5":
-  version: 4.21.6
-  resolution: "browserslist@npm:4.21.6"
+  version: 4.21.7
+  resolution: "browserslist@npm:4.21.7"
   dependencies:
     caniuse-lite: ^1.0.30001489
     electron-to-chromium: ^1.4.411
@@ -781,7 +793,7 @@ __metadata:
     update-browserslist-db: ^1.0.11
   bin:
     browserslist: cli.js
-  checksum: d9bfff6e5a34091cb73e229909674870ac5bafdd2f66aa05029102f8a93ed43167f12ad52007bc0e7e020fdd358509237ca2039db5667077187bf0cd8c3fa062
+  checksum: 3d0d025e6d381c4db5e71b538258952660ba574c060832095f182a9877ca798836fa550736269e669a2080e486f0cfdf5d3bcf2769b9f7cf123f6c6b8c005f8f
   languageName: node
   linkType: hard
 
@@ -850,9 +862,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30001406, caniuse-lite@npm:^1.0.30001464, caniuse-lite@npm:^1.0.30001489":
-  version: 1.0.30001489
-  resolution: "caniuse-lite@npm:1.0.30001489"
-  checksum: 94585a351fd7661b855c83eace474db0ee5a617159b46f2eff1f6fe4b85d7a205418471fdec8cf5cd647a7f79958706d5e664c0bbf3c7c09118b35db9bb95a1b
+  version: 1.0.30001492
+  resolution: "caniuse-lite@npm:1.0.30001492"
+  checksum: 261869f910ec905ab6aa5a754e4ae57da8c5c33f3b723db2fa21840da307667bff61057aef3abaca32091c1561c254dd3a807c0fdb054cdc9e7e3ba495a55e20
   languageName: node
   linkType: hard
 
@@ -900,11 +912,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"client-only@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "client-only@npm:0.0.1"
+  checksum: 0c16bf660dadb90610553c1d8946a7fdfb81d624adea073b8440b7d795d5b5b08beb3c950c6a2cf16279365a3265158a236876d92bce16423c485c322d7dfaf8
+  languageName: node
+  linkType: hard
+
 "client@workspace:.":
   version: 0.0.0-use.local
   resolution: "client@workspace:."
   dependencies:
     "@auth0/nextjs-auth0": ^2.6.0
+    "@headlessui/react": ^1.7.14
     "@prisma/client": ^4.14.1
     "@tanstack/react-query": ^4.29.11
     "@trpc/client": ^10.28.0
@@ -1230,9 +1250,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.411":
-  version: 1.4.411
-  resolution: "electron-to-chromium@npm:1.4.411"
-  checksum: f71613a0d07c43e16acbe4b38a1800e017e384e9f159ee2c94d16dd6385e812eb00d5dd3f9c237244c7b55c97a8ef5d90d40b099d07c96c83b2b958bc98fdc58
+  version: 1.4.415
+  resolution: "electron-to-chromium@npm:1.4.415"
+  checksum: a3e19922099bd0ecacfd0054ddf570fb1391142fd3f4f500fe86a55b0a1c4b22e85af10702a6b6d8b893a335f58c98beb9b6a91b6fc41126e94559d7a7d25b7d
   languageName: node
   linkType: hard
 
@@ -2004,7 +2024,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-core-module@npm:^2.11.0":
+"is-core-module@npm:^2.12.0":
   version: 2.12.1
   resolution: "is-core-module@npm:2.12.1"
   dependencies:
@@ -2149,9 +2169,9 @@ __metadata:
   linkType: hard
 
 "is-what@npm:^4.1.8":
-  version: 4.1.11
-  resolution: "is-what@npm:4.1.11"
-  checksum: 103752e31d1a39dd4c4ae8b6c4fd5363a9a911af76d35b0902d60c1b7c4a376c9bedf90f18ca8c3f4cbbbe82905493bd480592759ab8d82387b417ce2cd94f58
+  version: 4.1.12
+  resolution: "is-what@npm:4.1.12"
+  checksum: 0989928c681262b5405e1b88b68150e042b70e76e70b688751769c14c6d5d3e388a8dc422f2ebc535abc69561f35cdc3b9ca9f3521e06c413046975b8f892d09
   languageName: node
   linkType: hard
 
@@ -3074,14 +3094,14 @@ __metadata:
   linkType: hard
 
 "prisma@npm:^4.14.1":
-  version: 4.14.1
-  resolution: "prisma@npm:4.14.1"
+  version: 4.15.0
+  resolution: "prisma@npm:4.15.0"
   dependencies:
-    "@prisma/engines": 4.14.1
+    "@prisma/engines": 4.15.0
   bin:
     prisma: build/index.js
     prisma2: build/index.js
-  checksum: 2cb0085652b541aa4c855f1434083b6fc0f3df5be28a0558fe2e1b120546b95d114177f86641fa9e21e13fb3a27a48e8cfd240d683a9e8e872b72e2c8c61a7e2
+  checksum: a42b940396f5f101d44effad9bfccca4b062ae80a369dc44961cbc074326239340f05c5af49981b1cddb08d9155c4bcc93c4d69ed2ae4a634e1742159204cb89
   languageName: node
   linkType: hard
 
@@ -3174,11 +3194,11 @@ __metadata:
   linkType: hard
 
 "react-icons@npm:^4.8.0":
-  version: 4.8.0
-  resolution: "react-icons@npm:4.8.0"
+  version: 4.9.0
+  resolution: "react-icons@npm:4.9.0"
   peerDependencies:
     react: "*"
-  checksum: 4dbba7ad989c295b410e19b2a702722dae44368cb04b6515f9471353552f31ac80bd350f121d5bff79f81504b84039ede44d09e9f035f48bb1032e6eace126c4
+  checksum: 69d1000d02349cf4baa78a0882aff09723d348d910256ea7489dea777abf10f158b27c1b5d3b1d2ec030e21320eae0afcc13f9c9d11afb85a8809c59a23a923c
   languageName: node
   linkType: hard
 
@@ -3278,28 +3298,28 @@ __metadata:
   linkType: hard
 
 "resolve@npm:^1.1.7, resolve@npm:^1.22.2":
-  version: 1.22.2
-  resolution: "resolve@npm:1.22.2"
+  version: 1.22.3
+  resolution: "resolve@npm:1.22.3"
   dependencies:
-    is-core-module: ^2.11.0
+    is-core-module: ^2.12.0
     path-parse: ^1.0.7
     supports-preserve-symlinks-flag: ^1.0.0
   bin:
     resolve: bin/resolve
-  checksum: 7e5df75796ebd429445d102d5824482ee7e567f0070b2b45897b29bb4f613dcbc262e0257b8aeedb3089330ccaea0d6a0464df1a77b2992cf331dcda0f4cb549
+  checksum: fb834b81348428cb545ff1b828a72ea28feb5a97c026a1cf40aa1008352c72811ff4d4e71f2035273dc536dcfcae20c13604ba6283c612d70fa0b6e44519c374
   languageName: node
   linkType: hard
 
 "resolve@patch:resolve@^1.1.7#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.2#~builtin<compat/resolve>":
-  version: 1.22.2
-  resolution: "resolve@patch:resolve@npm%3A1.22.2#~builtin<compat/resolve>::version=1.22.2&hash=07638b"
+  version: 1.22.3
+  resolution: "resolve@patch:resolve@npm%3A1.22.3#~builtin<compat/resolve>::version=1.22.3&hash=07638b"
   dependencies:
-    is-core-module: ^2.11.0
+    is-core-module: ^2.12.0
     path-parse: ^1.0.7
     supports-preserve-symlinks-flag: ^1.0.0
   bin:
     resolve: bin/resolve
-  checksum: 66cc788f13b8398de18eb4abb3aed90435c84bb8935953feafcf7231ba4cd191b2c10b4a87b1e9681afc34fb138c705f91f7330ff90bfa36f457e5584076a2b8
+  checksum: ad59734723b596d0891321c951592ed9015a77ce84907f89c9d9307dd0c06e11a67906a3e628c4cae143d3e44898603478af0ddeb2bba3f229a9373efe342665
   languageName: node
   linkType: hard
 

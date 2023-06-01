@@ -15,9 +15,17 @@ export default function PostList({
   hasMore,
   fetchNewPosts,
 }: Props) {
-  if (isLoading) return <p>Loading...</p>
+  if (isLoading)
+    return (
+      <>
+        {Array.from({ length: 10 }).map((_, i) => (
+          <PostItem key={i} loading />
+        ))}
+      </>
+    )
 
-  if (!posts || posts.length === 0) return <p>No Posts</p>
+  if (!posts || posts.length === 0)
+    return <p className="mx-2 text-2xl">No Posts</p>
 
   return (
     <InfiniteScroll
@@ -27,7 +35,7 @@ export default function PostList({
       loader={<p>Loading...</p>}
     >
       {posts.map((post) => (
-        <PostItem key={post.id} postInfo={post} />
+        <PostItem key={post.id} info={post} />
       ))}
     </InfiniteScroll>
   )

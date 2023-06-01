@@ -1,8 +1,14 @@
 import { UserProvider } from '@auth0/nextjs-auth0/client'
-import { trpc } from '../utils/trpc'
+import { createContext, useState } from 'react'
+
+import Header from '../components/Header'
+import NotLoggedInModal from '../components/NotLoggedInModal'
+
+import { NotLoggedInModalOpenContext } from '../utils/context'
 
 import '../styles/globals.css'
-import Header from '../components/Header'
+
+import { trpc } from '../utils/trpc'
 
 type Props = {
   Component: any
@@ -10,13 +16,21 @@ type Props = {
 }
 
 function App({ Component, pageProps }: Props) {
+  const [notLoggedInModalOpen, setNotLoggedInModalOpen] = useState(false)
+
   return (
     <UserProvider>
-      <div className="max-w-2xl mx-auto">
-        <Header />
+      <NotLoggedInModalOpenContext.Provider
+        value={{ notLoggedInModalOpen, setNotLoggedInModalOpen }}
+      >
+        <div className="max-w-2xl mx-auto">
+          <Header />
 
-        <Component {...pageProps} />
-      </div>
+          <Component {...pageProps} />
+        </div>
+
+        <NotLoggedInModal />
+      </NotLoggedInModalOpenContext.Provider>
     </UserProvider>
   )
 }

@@ -1,42 +1,62 @@
 import { UserProfile, useUser } from '@auth0/nextjs-auth0/client'
-import { useState } from 'react'
+import Head from 'next/head'
+import { useContext, useState } from 'react'
 
 import Button from '../components/Button'
 import PostForm from '../components/PostForm'
 import PostList from '../components/PostList'
 
 import { trpc } from '../utils/trpc'
+import { NotLoggedInModalOpenContext } from '../utils/context'
 
 export default function Index() {
+  const { setNotLoggedInModalOpen } = useContext(NotLoggedInModalOpenContext)
+
   const { user, isLoading: auth0IsLoading } = useUser()
 
   const [tab, setTab] = useState<'following' | 'for-you'>('for-you')
 
-  if (auth0IsLoading) return <p>Loading...</p>
+  const handleToggleFollowing = () => {
+    if (auth0IsLoading) return
+
+    if (!user) {
+      setNotLoggedInModalOpen(true)
+      return
+    }
+
+    setTab('following')
+  }
 
   return (
-    <div className="flex flex-col">
-      <PostForm />
+    <>
+      <Head>
+        <title>Text Based - Home</title>
+      </Head>
 
-      <div className="flex grow justify-center m-2">
-        <Button
-          active={tab === 'following'}
-          onClick={() => setTab('following')}
-          className="rounded-r-none border"
-        >
-          Following
-        </Button>
-        <Button
-          active={tab === 'for-you'}
-          onClick={() => setTab('for-you')}
-          className="rounded-l-none border"
-        >
-          For You
-        </Button>
+      <div className="flex flex-col">
+        <PostForm />
+
+        <div className="flex grow justify-center m-2">
+          <Button
+            active={tab === 'following'}
+            onClick={handleToggleFollowing}
+            className="rounded-r-none border"
+          >
+            Following
+          </Button>
+
+          <Button
+            active={tab === 'for-you'}
+            onClick={() => setTab('for-you')}
+            className="rounded-l-none border"
+          >
+            For You
+          </Button>
+        </div>
+
+        {tab === 'for-you' ? <ForYou user={user} /> : <Following user={user} />}
       </div>
-
-      {tab === 'for-you' ? <ForYou user={user} /> : <Following user={user} />}
-    </div>
+    </>
   )
 }
 

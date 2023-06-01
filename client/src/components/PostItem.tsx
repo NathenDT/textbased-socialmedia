@@ -1,48 +1,67 @@
 import { useUser } from '@auth0/nextjs-auth0/client'
 import { FaRegComment, FaRegHeart } from 'react-icons/fa'
 import { useRouter } from 'next/router'
-import { trpc } from '../utils/trpc'
+import { useContext } from 'react'
 
 import Avatar from './Avatar'
+import IconButton from './IconButton'
 
 import formateDate from '../utils/formatDate'
+import { trpc } from '../utils/trpc'
+import { NotLoggedInModalOpenContext } from '../utils/context'
 
 type Props = {
-  postInfo: PostInfoType
+  info?: PostInfoType
+  loading?: boolean
 }
 
-export default function PostItem({ postInfo }: Props) {
+export default function PostItem({ info, loading = false }: Props) {
   const router = useRouter()
 
-  const handleClick = () => router.push(`/post/${postInfo.id}`)
+  const handleClick = () => {
+    if (loading || !info) return
+
+    router.push(`/post/${info.id}`)
+  }
 
   return (
     <div
       className="flex m-2 border rounded-md cursor-pointer"
       onClick={handleClick}
     >
-      <Avatar username={postInfo.username} className="m-2" />
+      {loading || !info ? (
+        <Avatar loading className="m-2" />
+      ) : (
+        <Avatar username={info.username} className="m-2" />
+      )}
 
       <div className="flex flex-col grow">
-        <p className="m-2 mb-0 text-sm">
-          <span className="font-semibold text-base">{postInfo.username}</span>{' '}
-          {formateDate(postInfo.createdAt)}
-        </p>
+        {loading || !info ? (
+          <div className="animate-pulse h-5 w-24 m-2 bg-slate-500 rounded"></div>
+        ) : (
+          <p className="m-2 mb-0 text-sm">
+            <span className="font-semibold text-base">{info.username}</span>{' '}
+            {formateDate(info.createdAt)}
+          </p>
+        )}
 
-        <p className="mx-2 grow">{postInfo.content}</p>
+        {loading || !info ? (
+          <div className="animate-pulse h-10 grow mx-2 bg-slate-500 rounded"></div>
+        ) : (
+          <p className="mx-2 grow">{info.content}</p>
+        )}
 
         <div className="flex grow justify-end m-2">
-          <div className="flex mx-2 p-2">
-            <FaRegComment className="h-5 w-5" />
-
-            <p className="inline-block ml-2">{postInfo.commentCount}</p>
-          </div>
+          <IconButton icon={FaRegComment} loading={loading}>
+            {info?.commentCount}
+          </IconButton>
 
           <LikeButton
-            postId={postInfo.id}
-            likeCount={postInfo.likeCount}
-            username={postInfo.username}
-            liked={postInfo.likedByMe}
+            postId={info?.id}
+            likeCount={info?.likeCount}
+            username={info?.username}
+            liked={info?.likedByMe}
+            loading={loading}
           />
         </div>
       </div>
@@ -51,13 +70,22 @@ export default function PostItem({ postInfo }: Props) {
 }
 
 type LikeButtonProps = {
-  postId: string
-  likeCount: number
-  username: string
+  postId?: string
+  likeCount?: number
+  username?: string
   liked?: boolean
+  loading?: boolean
 }
 
-function LikeButton({ postId, likeCount, username, liked }: LikeButtonProps) {
+function LikeButton({
+  postId,
+  likeCount,
+  username,
+  liked,
+  loading = false,
+}: LikeButtonProps) {
+  const { setNotLoggedInModalOpen } = useContext(NotLoggedInModalOpenContext)
+
   const { user, isLoading } = useUser()
   const trpcUtils = trpc.useContext()
   const { mutate } = trpc.post.toggleLike.useMutation({
@@ -96,7 +124,7 @@ function LikeButton({ postId, likeCount, username, liked }: LikeButtonProps) {
       )
 
       trpcUtils.post.getProfile.setInfiniteData(
-        { username, auth0Id: user!.sub!.split('|')[1] },
+        { username: username!, auth0Id: user!.sub!.split('|')[1] },
         updateData
       )
     },
@@ -105,10 +133,14 @@ function LikeButton({ postId, likeCount, username, liked }: LikeButtonProps) {
   if (isLoading) return <p>Loading...</p>
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault()
     e.stopPropagation()
 
-    mutate({ postId, auth0Id: user!.sub!.split('|')[1] })
+    if (!user?.sub) {
+      setNotLoggedInModalOpen(true)
+      return
+    }
+
+    mutate({ postId: postId!, auth0Id: user.sub.split('|')[1] })
   }
 
   const _className = `flex mx-2 border rounded-md p-2 ${
@@ -116,10 +148,13 @@ function LikeButton({ postId, likeCount, username, liked }: LikeButtonProps) {
   }`
 
   return (
-    <button onClick={handleClick} className={_className}>
-      <FaRegHeart className="h-5 w-5" />
-
-      <p className="inline-block ml-2">{likeCount}</p>
-    </button>
+    <IconButton
+      icon={FaRegHeart}
+      className={_className}
+      loading={loading}
+      onClick={handleClick}
+    >
+      {likeCount}
+    </IconButton>
   )
 }

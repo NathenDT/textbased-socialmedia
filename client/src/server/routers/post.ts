@@ -64,7 +64,7 @@ const post = router({
         createdAt: data.createdAt.toISOString(),
         commentCount: 0,
         likeCount: data._count.likes,
-        likedByMe: data.likes.length > 0,
+        likedByMe: auth0Id ? data.likes.length > 0 : undefined,
       }
 
       return { post }

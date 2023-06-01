@@ -7,6 +7,7 @@ import type {
   InferGetStaticPropsType,
   NextPage,
 } from 'next'
+import { useContext, useEffect } from 'react'
 
 import Avatar from '../../components/Avatar'
 import Button from '../../components/Button'
@@ -14,11 +15,13 @@ import PostList from '../../components/PostList'
 
 import { trpc } from '../../utils/trpc'
 import { ssgHelper } from '../../server/ssgHelper'
-import { useEffect } from 'react'
+import { NotLoggedInModalOpenContext } from '../../utils/context'
 
 const UserPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   username,
 }) => {
+  const { setNotLoggedInModalOpen } = useContext(NotLoggedInModalOpenContext)
+
   const { user: auth0User, isLoading } = useUser()
 
   const user = trpc.user.getByUsername.useQuery({
@@ -53,15 +56,16 @@ const UserPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     console.log(user.data)
   }, [user.data])
 
-  if (isLoading || user.data === undefined) return <p>Loading...</p>
+  if (isLoading || !user.data) return <p>Loading...</p>
 
-  if (user?.data === null) return <ErrorPage statusCode={404} />
+  if (!user?.data) return <ErrorPage statusCode={404} />
 
   return (
     <>
       <Head>
         <title>Text Based - {username}</title>
       </Head>
+
       <div className="flex flex-col w-full">
         <div className="flex m-2 border rounded-md">
           <Avatar username={user.data.username} size={4} className="m-2" />
@@ -80,17 +84,22 @@ const UserPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 
           <div className="m-2">
             {auth0User?.sub?.split('|')[1] === user.data.auth0Id ? (
-              <Button>Edit Profile</Button>
+              <p className="m-2 p-2 border rounded-md">That's You</p>
             ) : (
               <FollowButton
                 isLoading={toggleFollow.isLoading}
                 isFollowing={user.data.isFollowing || false}
-                onClick={() =>
+                onClick={() => {
+                  if (!auth0User) {
+                    setNotLoggedInModalOpen(true)
+                    return
+                  }
+
                   toggleFollow.mutate({
                     auth0Id: auth0User!.sub!.split('|')[1],
                     username,
                   })
-                }
+                }}
               />
             )}
           </div>

@@ -16,15 +16,11 @@ export default function SignUpCont() {
   }
 
   if (!user) {
-    return router.back()
+    return router.push('/')
   }
 
   return (
-    <div className="flex flex-col">
-      <p className="m-2 text-4xl">Sign Up Continue</p>
-
-      {user && <Form auth0User={user} />}
-    </div>
+    <div className="flex flex-col">{user && <Form auth0User={user} />}</div>
   )
 }
 
@@ -42,7 +38,7 @@ function Form({ auth0User }: FormProps) {
 
   const [username, setUsername] = useState('')
 
-  if (isLoading) {
+  if (isLoading || !data?.user?.username) {
     return <div>Loading...</div>
   }
 
@@ -60,6 +56,8 @@ function Form({ auth0User }: FormProps) {
 
   return (
     <>
+      <p className="m-2 text-4xl">Sign Up Continue</p>
+
       <TextInput
         label="Username"
         value={username}

@@ -14,11 +14,11 @@ declare global {
   type CommentInfoType = {
     id: string
     username: string
-    text: string
+    content: string
     createdAt: string
     postId: string
-    likeIds: string[]
-    replyIds?: string[]
+    likeCount: number
+    likedByMe?: boolean
   }
 
   type UserInfoType = {
