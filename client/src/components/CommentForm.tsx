@@ -1,32 +1,64 @@
+import { useUser } from '@auth0/nextjs-auth0/client'
+import { useState } from 'react'
+
 import Button from './Button'
 import TextArea from './TextArea'
 
+import { trpc } from '../utils/trpc'
+
 type Props = React.HTMLProps<HTMLDivElement> & {
-  value: string
-  setValue: React.Dispatch<React.SetStateAction<string>>
+  postId: string
   className?: string
-  reply?: boolean
 }
 
-export default function CommentForm({
-  value,
-  setValue,
-  className,
-  reply,
-  ...rest
-}: Props) {
+export default function CommentForm({ postId, className, ...rest }: Props) {
+  const { user, isLoading } = useUser()
+  const trpcUtils = trpc.useContext()
+  const { mutate } = trpc.comment.new.useMutation({
+    onSuccess: (newComment) => {
+      setContent('')
+
+      trpcUtils.comment.getByPostId.setInfiniteData({ postId }, (oldData) => {
+        if (oldData == null || oldData.pages[0] == null) return
+
+        return {
+          ...oldData,
+          pages: [
+            {
+              ...oldData.pages[0],
+              comments: [newComment.comment, ...oldData.pages[0].comments],
+            },
+            ...oldData.pages.slice(1),
+          ],
+        }
+      })
+    },
+  })
+
+  const [content, setContent] = useState('')
+
+  const handleComment = () => {
+    if (!user?.sub || isLoading) return
+
+    mutate({ postId, content, auth0Id: user!.sub!.split('|')[1] })
+  }
+
   return (
     <div className={'flex flex-col ' + className} {...rest}>
       <TextArea
-        placeholder={`Write a ${reply ? 'reply' : 'comment'}...`}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
+        placeholder={'Write a comment...'}
+        value={content}
+        onChange={(event) => setContent(event.target.value)}
         className="grow m-2"
       />
 
       <div className="flex grow justify-end">
-        <Button disabled={!value} className="m-2 mt-0">
-          {reply ? 'Reply' : 'Comment'}
+        <Button
+          disabled={!content}
+          onClick={handleComment}
+          className="m-2 mt-0"
+        >
+          Comment
         </Button>
       </div>
     </div>

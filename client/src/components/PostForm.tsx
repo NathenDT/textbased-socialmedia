@@ -16,8 +16,6 @@ export default function PostForm() {
     onSuccess: (newPost) => {
       setContent('')
 
-      console.log(newPost)
-
       trpcUtils.post.getForYou.setInfiniteData(
         { auth0Id: user!.sub!.split('|')[1] },
         (oldData) => {

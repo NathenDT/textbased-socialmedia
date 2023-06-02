@@ -7,7 +7,7 @@ import type {
   InferGetStaticPropsType,
   NextPage,
 } from 'next'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 
 import Avatar from '../../components/Avatar'
 import Button from '../../components/Button'
@@ -38,8 +38,6 @@ const UserPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 
           const countModifier = addedFollow ? 1 : -1
 
-          console.log(addedFollow)
-
           return {
             ...oldData,
             followerCount: oldData.followerCount + countModifier,
@@ -49,12 +47,6 @@ const UserPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
       )
     },
   })
-
-  useEffect(() => {
-    if (!user.data) return
-
-    console.log(user.data)
-  }, [user.data])
 
   if (isLoading || !user.data) return <p>Loading...</p>
 

@@ -1,5 +1,5 @@
 import { UserProvider } from '@auth0/nextjs-auth0/client'
-import { createContext, useState } from 'react'
+import { useState } from 'react'
 
 import Header from '../components/Header'
 import NotLoggedInModal from '../components/NotLoggedInModal'

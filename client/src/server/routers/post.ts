@@ -50,7 +50,7 @@ const post = router({
           user: {
             select: { username: true },
           },
-          _count: { select: { likes: true } },
+          _count: { select: { likes: true, comments: true } },
           likes: auth0Id == null ? false : { where: { user: { auth0Id } } },
         },
       })
@@ -62,7 +62,7 @@ const post = router({
         username: data.user.username,
         content: data.content,
         createdAt: data.createdAt.toISOString(),
-        commentCount: 0,
+        commentCount: data._count.comments,
         likeCount: data._count.likes,
         likedByMe: auth0Id ? data.likes.length > 0 : undefined,
       }
@@ -89,7 +89,7 @@ const post = router({
           user: {
             select: { username: true },
           },
-          _count: { select: { likes: true } },
+          _count: { select: { likes: true, comments: true } },
           likes: auth0Id == null ? false : { where: { user: { auth0Id } } },
         },
       })
@@ -108,7 +108,7 @@ const post = router({
           username: post.user.username,
           content: post.content,
           createdAt: post.createdAt.toISOString(),
-          commentCount: 0,
+          commentCount: post._count.comments,
           likeCount: post._count.likes,
           likedByMe: auth0Id ? post.likes.length > 0 : false,
         }
@@ -137,7 +137,7 @@ const post = router({
           user: {
             select: { username: true },
           },
-          _count: { select: { likes: true } },
+          _count: { select: { likes: true, comments: true } },
           likes: auth0Id == null ? false : { where: { user: { auth0Id } } },
         },
       })
@@ -156,7 +156,7 @@ const post = router({
           username: post.user.username,
           content: post.content,
           createdAt: post.createdAt.toISOString(),
-          commentCount: 0,
+          commentCount: post._count.comments,
           likeCount: post._count.likes,
           likedByMe: auth0Id ? post.likes.length > 0 : false,
         }
@@ -192,7 +192,7 @@ const post = router({
           user: {
             select: { username: true },
           },
-          _count: { select: { likes: true } },
+          _count: { select: { likes: true, comments: true } },
           likes: auth0Id == null ? false : { where: { user: { auth0Id } } },
         },
       })
@@ -211,7 +211,7 @@ const post = router({
           username: post.user.username,
           content: post.content,
           createdAt: post.createdAt.toISOString(),
-          commentCount: 0,
+          commentCount: post._count.comments,
           likeCount: post._count.likes,
           likedByMe: auth0Id ? post.likes.length > 0 : false,
         }

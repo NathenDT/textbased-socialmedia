@@ -43,12 +43,38 @@ const comment = router({
       return { comment }
     }),
   getByPostId: procedure
-    .input(z.object({ postId: z.string() }))
-    .query(async ({ input: { postId } }) => {
-      const data = await prisma.comment.findMany({
-        where: { postId },
-        include: { user: true },
+    .input(
+      z.object({
+        postId: z.string(),
+        limit: z.number().optional(),
+        cursor: z.object({ id: z.string(), createdAt: z.date() }).optional(),
+        auth0Id: z.string().optional(),
       })
+    )
+    .query(async ({ input: { postId, limit = 10, cursor, auth0Id } }) => {
+      const data = await prisma.comment.findMany({
+        take: limit + 1,
+        orderBy: { createdAt: 'desc' },
+        cursor: cursor ? { createdAt_id: cursor } : undefined,
+        where: { postId },
+        select: {
+          id: true,
+          postId: true,
+          content: true,
+          createdAt: true,
+          user: {
+            select: { username: true },
+          },
+        },
+      })
+
+      let nextCursor: typeof cursor | undefined
+      if (data.length > limit) {
+        const nextItem = data.pop()
+        if (nextItem != null) {
+          nextCursor = { id: nextItem.id, createdAt: nextItem.createdAt }
+        }
+      }
 
       const comments: CommentInfoType[] = data.map((comment) => ({
         id: comment.id,
@@ -59,7 +85,7 @@ const comment = router({
         likeCount: 0,
       }))
 
-      return { comments }
+      return { comments, nextCursor }
     }),
 })
 

@@ -20,7 +20,13 @@ export default function SignUpCont() {
   }
 
   return (
-    <div className="flex flex-col">{user && <Form auth0User={user} />}</div>
+    <div className="flex flex-col">
+      {user && <Form auth0User={user} />}
+
+      <Button href="/api/auth/logout" className="m-2">
+        Cancel
+      </Button>
+    </div>
   )
 }
 
@@ -38,7 +44,7 @@ function Form({ auth0User }: FormProps) {
 
   const [username, setUsername] = useState('')
 
-  if (isLoading || !data?.user?.username) {
+  if (isLoading) {
     return <div>Loading...</div>
   }
 

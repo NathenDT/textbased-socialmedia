@@ -8,9 +8,12 @@ import type {
 import Head from 'next/head'
 
 import PostItem from '../../components/PostItem'
+import CommentItem from '../../components/CommentItem'
 
 import { trpc } from '../../utils/trpc'
 import { ssgHelper } from '../../server/ssgHelper'
+import CommentForm from '../../components/CommentForm'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 const PostPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   id,
@@ -30,7 +33,9 @@ const PostPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 
         <p className="m-2 text-2xl">Comments</p>
 
-        <p className="mx-2">Coming Soon</p>
+        <CommentForm postId={id} />
+
+        <CommentList postId={id} />
       </div>
     </>
   )
@@ -50,6 +55,39 @@ function Post({ postId, auth0Id }: PostProps) {
   if (!data) return <p>Post not found</p>
 
   return <PostItem info={data.post} loading={isLoading} />
+}
+
+type CommentListProps = {
+  postId: string
+}
+
+function CommentList({ postId }: CommentListProps) {
+  const { data, isLoading, fetchNextPage, hasNextPage } =
+    trpc.comment.getByPostId.useInfiniteQuery(
+      {
+        postId,
+      },
+      { getNextPageParam: (lastPage) => lastPage.nextCursor }
+    )
+
+  if (isLoading) return <p>Loading...</p>
+
+  if (!data) return <p>Comments not found</p>
+
+  return (
+    <InfiniteScroll
+      dataLength={data.pages.length}
+      next={fetchNextPage}
+      hasMore={hasNextPage || false}
+      loader={<p>Loading...</p>}
+    >
+      {data.pages
+        .flatMap((page) => page.comments)
+        .map((comment) => (
+          <CommentItem key={comment.id} info={comment} className="m-2" />
+        ))}
+    </InfiniteScroll>
+  )
 }
 
 export const getStaticPaths: GetStaticPaths = () => {
