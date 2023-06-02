@@ -30,7 +30,7 @@ export default function Index() {
   return (
     <>
       <Head>
-        <title>Text Based - Home</title>
+        <title>Text Based</title>
       </Head>
 
       <div className="flex flex-col">

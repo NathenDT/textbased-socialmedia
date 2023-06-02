@@ -55,7 +55,7 @@ const UserPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   return (
     <>
       <Head>
-        <title>Text Based - {username}</title>
+        <title>{username}</title>
       </Head>
 
       <div className="flex flex-col w-full">

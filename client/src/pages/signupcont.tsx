@@ -37,7 +37,22 @@ type FormProps = {
 function Form({ auth0User }: FormProps) {
   const router = useRouter()
 
-  const { mutate: newUser } = trpc.user.new.useMutation()
+  const trpcUtils = trpc.useContext()
+  const { mutate: newUser } = trpc.user.new.useMutation({
+    onSuccess: (newUser) => {
+      trpcUtils.user.getByAuth0Id.setData(
+        { auth0Id: auth0User.sub!.split('|')[1] },
+        (oldData) => {
+          if (oldData == null) return
+
+          return {
+            ...oldData,
+            user: newUser.user,
+          }
+        }
+      )
+    },
+  })
   const { data, isLoading } = trpc.user.getByAuth0Id.useQuery({
     auth0Id: auth0User.sub!.split('|')[1],
   })
@@ -56,6 +71,8 @@ function Form({ auth0User }: FormProps) {
     const auth0Id = auth0User.sub!.split('|')[1]
 
     newUser({ auth0Id, username })
+
+    console.log('newUser', { auth0Id, username })
 
     router.push('/')
   }

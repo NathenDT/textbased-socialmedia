@@ -54,6 +54,8 @@ const user = router({
         data: { auth0Id, username },
       })
 
+      console.log(user)
+
       return { user }
     }),
   toggleFollow: procedure
