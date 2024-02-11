@@ -6,6 +6,8 @@ import { useContext } from 'react'
 import Avatar from './Avatar'
 import IconButton from './IconButton'
 
+import classNames from '../utils/classNames'
+import formatAuth0Sub from '../utils/formatAuth0Sub'
 import formateDate from '../utils/formatDate'
 import { trpc } from '../utils/trpc'
 import { NotLoggedInModalOpenContext } from '../utils/context'
@@ -87,6 +89,7 @@ function LikeButton({
   const { setNotLoggedInModalOpen } = useContext(NotLoggedInModalOpenContext)
 
   const { user, isLoading } = useUser()
+
   const trpcUtils = trpc.useContext()
   const { mutate } = trpc.post.toggleLike.useMutation({
     onSuccess: ({ addedLike }) => {
@@ -99,38 +102,52 @@ function LikeButton({
 
         return {
           ...oldData,
-          pages: oldData.pages.map((page) => {
-            return {
-              ...page,
-              posts: page.posts.map((post) => {
-                if (post.id === postId) {
-                  return {
-                    ...post,
-                    likeCount: post.likeCount + countModifier,
-                    likedByMe: addedLike,
-                  }
+          pages: oldData.pages.map((page) => ({
+            ...page,
+            posts: page.posts.map((post) => {
+              if (post.id === postId) {
+                return {
+                  ...post,
+                  likeCount: post.likeCount + countModifier,
+                  likedByMe: addedLike,
                 }
+              }
 
-                return post
-              }),
-            }
-          }),
+              return post
+            }),
+          })),
         }
       }
 
       trpcUtils.post.getForYou.setInfiniteData(
-        { auth0Id: user!.sub!.split('|')[1] },
+        { auth0Id: formatAuth0Sub(user)[1] },
         updateData
       )
 
       trpcUtils.post.getProfile.setInfiniteData(
-        { username: username!, auth0Id: user!.sub!.split('|')[1] },
+        { username: username!, auth0Id: formatAuth0Sub(user)[1] },
         updateData
+      )
+
+      trpcUtils.post.getPost.setData(
+        { postId: postId!, auth0Id: formatAuth0Sub(user)[1] },
+        (oldData) => {
+          if (oldData == null) return
+
+          const countModifier = addedLike ? 1 : -1
+
+          return {
+            ...oldData,
+            post: {
+              ...oldData.post,
+              likeCount: oldData.post.likeCount + countModifier,
+              likedByMe: addedLike,
+            },
+          }
+        }
       )
     },
   })
-
-  if (isLoading) return <p>Loading...</p>
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation()
@@ -140,18 +157,17 @@ function LikeButton({
       return
     }
 
-    mutate({ postId: postId!, auth0Id: user.sub.split('|')[1] })
+    mutate({ postId: postId!, auth0Id: formatAuth0Sub(user)[1] })
   }
-
-  const _className = `flex mx-2 border rounded-md p-2 ${
-    liked ? 'border-red-500 text-red-500' : ''
-  }`
 
   return (
     <IconButton
       icon={FaRegHeart}
-      className={_className}
-      loading={loading}
+      className={classNames(
+        'flex mx-2 border rounded-md p-2',
+        liked ? 'border-red-500 text-red-500' : ''
+      )}
+      loading={loading || isLoading}
       onClick={handleClick}
     >
       {likeCount}

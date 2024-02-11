@@ -1,3 +1,5 @@
+import classNames from '../utils/classNames'
+
 type Props = React.HTMLProps<SVGSVGElement> & {
   size?: number
   className?: string
@@ -6,7 +8,10 @@ type Props = React.HTMLProps<SVGSVGElement> & {
 export default function LoadingCircle({ size = 1.5, className }: Props) {
   return (
     <svg
-      className={`text-gray-200 animate-spin dark:text-gray-600 fill-blue-600 ${className}`}
+      className={classNames(
+        'text-gray-200 animate-spin dark:text-gray-600 fill-blue-600',
+        className
+      )}
       viewBox="0 0 100 101"
       style={{
         width: size + 'em',

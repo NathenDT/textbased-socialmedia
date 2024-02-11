@@ -1,27 +1,24 @@
 import { UserProfile, useUser } from '@auth0/nextjs-auth0/client'
+import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-
-import TextInput from '../components/TextInput'
 import { useState } from 'react'
-import Button from '../components/Button'
 
+import Button from '../components/Button'
+import LoadingCircle from '../components/LoadingCircle'
+import TextInput, {
+  handleTextChange,
+  DEFAULT_TEXT_INPUT,
+} from '../components/TextInput'
+
+import formatAuth0Sub from '../utils/formatAuth0Sub'
 import { trpc } from '../utils/trpc'
 
-export default function SignUpCont() {
-  const router = useRouter()
+const SignUpContPage: NextPage = () => {
   const { user, isLoading } = useUser()
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
-
-  if (!user) {
-    return router.push('/')
-  }
 
   return (
     <div className="flex flex-col">
-      {user && <Form auth0User={user} />}
+      {user && <Form auth0User={user} loading={isLoading} />}
 
       <Button href="/api/auth/logout" className="m-2">
         Cancel
@@ -32,16 +29,17 @@ export default function SignUpCont() {
 
 type FormProps = {
   auth0User: UserProfile
+  loading: boolean
 }
 
-function Form({ auth0User }: FormProps) {
+function Form({ auth0User, loading }: FormProps) {
   const router = useRouter()
 
   const trpcUtils = trpc.useContext()
   const { mutate: newUser } = trpc.user.new.useMutation({
     onSuccess: (newUser) => {
       trpcUtils.user.getByAuth0Id.setData(
-        { auth0Id: auth0User.sub!.split('|')[1] },
+        { auth0Id: formatAuth0Sub(auth0User)[1] },
         (oldData) => {
           if (oldData == null) return
 
@@ -51,16 +49,31 @@ function Form({ auth0User }: FormProps) {
           }
         }
       )
+
+      router.push('/')
+    },
+    onError: (error) => {
+      setError(error.message)
     },
   })
+
   const { data, isLoading } = trpc.user.getByAuth0Id.useQuery({
-    auth0Id: auth0User.sub!.split('|')[1],
+    auth0Id: formatAuth0Sub(auth0User)[1],
   })
 
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useState<TextInputType>(DEFAULT_TEXT_INPUT)
+  const [error, setError] = useState<string>('')
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className="w-full flex justify-center m-2">
+        <LoadingCircle />
+      </div>
+    )
+  }
+
+  if (auth0User) {
+    router.push('/')
   }
 
   if (data?.user) {
@@ -68,13 +81,9 @@ function Form({ auth0User }: FormProps) {
   }
 
   const handleSubmit = () => {
-    const auth0Id = auth0User.sub!.split('|')[1]
+    setError('')
 
-    newUser({ auth0Id, username })
-
-    console.log('newUser', { auth0Id, username })
-
-    router.push('/')
+    newUser({ auth0Id: formatAuth0Sub(auth0User)[1], username: username.value })
   }
 
   return (
@@ -83,14 +92,24 @@ function Form({ auth0User }: FormProps) {
 
       <TextInput
         label="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        value={username.value}
+        onChange={handleTextChange(setUsername)}
+        error={Boolean(username.error)}
+        helperText={username.error}
         className="m-2"
       />
 
-      <Button onClick={handleSubmit} disabled={!username} className="m-2">
+      <Button
+        onClick={handleSubmit}
+        disabled={Boolean(username.error)}
+        className="m-2"
+      >
         Sign Up
       </Button>
+
+      {error && <p className="m-2 text-red-500">{error}</p>}
     </>
   )
 }
+
+export default SignUpContPage

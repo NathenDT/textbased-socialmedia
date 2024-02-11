@@ -4,6 +4,8 @@ import { useState } from 'react'
 import Button from './Button'
 import TextArea from './TextArea'
 
+import classNames from '../utils/classNames'
+import formatAuth0Sub from '../utils/formatAuth0Sub'
 import { trpc } from '../utils/trpc'
 
 type Props = React.HTMLProps<HTMLDivElement> & {
@@ -13,6 +15,7 @@ type Props = React.HTMLProps<HTMLDivElement> & {
 
 export default function CommentForm({ postId, className, ...rest }: Props) {
   const { user, isLoading } = useUser()
+
   const trpcUtils = trpc.useContext()
   const { mutate } = trpc.comment.new.useMutation({
     onSuccess: (newComment) => {
@@ -37,14 +40,16 @@ export default function CommentForm({ postId, className, ...rest }: Props) {
 
   const [content, setContent] = useState('')
 
+  if (isLoading || !user) return null
+
   const handleComment = () => {
     if (!user?.sub || isLoading) return
 
-    mutate({ postId, content, auth0Id: user!.sub!.split('|')[1] })
+    mutate({ postId, content, auth0Id: formatAuth0Sub(user)[1] })
   }
 
   return (
-    <div className={'flex flex-col ' + className} {...rest}>
+    <div className={classNames('flex flex-col', className)} {...rest}>
       <TextArea
         placeholder={'Write a comment...'}
         value={content}

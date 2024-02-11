@@ -1,17 +1,19 @@
 import { useUser } from '@auth0/nextjs-auth0/client'
 import Link from 'next/link'
+import { Fragment } from 'react'
 
 import { Menu, Transition } from '@headlessui/react'
 
+import Avatar from './Avatar'
 import Button from './Button'
 
+import formatAuth0Sub from '../utils/formatAuth0Sub'
+import classNames from '../utils/classNames'
 import { trpc } from '../utils/trpc'
-import Avatar from './Avatar'
-import { Fragment } from 'react'
 
 export default function Header() {
   return (
-    <div className="full-width flex top-0 bg-white items-center">
+    <div className="full-width sticky flex top-0 bg-white items-center">
       <div className="text-3xl m-2 font-semibold">
         <Link href="/">Text Based</Link>
       </div>
@@ -35,7 +37,7 @@ function Auth() {
       </Button>
     )
 
-  return <Profile auth0Id={user.sub!.split('|')[1]} />
+  return <Profile auth0Id={formatAuth0Sub(user)[1]} />
 }
 
 type ProfileProps = {
@@ -114,8 +116,4 @@ function Profile({ auth0Id }: ProfileProps) {
       </Transition>
     </Menu>
   )
-}
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
 }

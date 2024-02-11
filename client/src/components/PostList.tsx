@@ -1,6 +1,7 @@
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 import PostItem from './PostItem'
+import LoadingCircle from './LoadingCircle'
 
 type Props = {
   posts: PostInfoType[] | undefined
@@ -32,7 +33,11 @@ export default function PostList({
       dataLength={posts.length}
       next={fetchNewPosts}
       hasMore={hasMore}
-      loader={<p>Loading...</p>}
+      loader={
+        <div className="w-full justify-center">
+          <LoadingCircle />
+        </div>
+      }
     >
       {posts.map((post) => (
         <PostItem key={post.id} info={post} />

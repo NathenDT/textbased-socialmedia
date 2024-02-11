@@ -6,8 +6,9 @@ import Button from '../components/Button'
 import PostForm from '../components/PostForm'
 import PostList from '../components/PostList'
 
-import { trpc } from '../utils/trpc'
 import { NotLoggedInModalOpenContext } from '../utils/context'
+import formatAuth0Sub from '../utils/formatAuth0Sub'
+import { trpc } from '../utils/trpc'
 
 export default function Index() {
   const { setNotLoggedInModalOpen } = useContext(NotLoggedInModalOpenContext)
@@ -67,7 +68,7 @@ type ForYouProps = {
 function ForYou({ user }: ForYouProps) {
   const { data, isLoading, fetchNextPage, hasNextPage } =
     trpc.post.getForYou.useInfiniteQuery(
-      { auth0Id: user?.sub?.split('|')[1] },
+      { auth0Id: formatAuth0Sub(user)[1] },
       { getNextPageParam: (lastPage) => lastPage.nextCursor }
     )
 
@@ -88,7 +89,7 @@ type FollowingProps = {
 function Following({ user }: FollowingProps) {
   const { data, isLoading, fetchNextPage, hasNextPage } =
     trpc.post.getFollowing.useInfiniteQuery(
-      { auth0Id: user!.sub!.split('|')[1] },
+      { auth0Id: formatAuth0Sub(user)[1] },
       { getNextPageParam: (lastPage) => lastPage.nextCursor }
     )
 

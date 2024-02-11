@@ -1,5 +1,7 @@
 import { IconType } from 'react-icons'
 
+import classNames from '../utils/classNames'
+
 type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode
   icon: IconType
@@ -16,7 +18,10 @@ export default function IconButton({
 }: Props) {
   return (
     <button
-      className={'flex border rounded-md p-2 items-center ' + className}
+      className={classNames(
+        'flex border rounded-md p-2 items-center',
+        className
+      )}
       {...rest}
     >
       <Icon className="h-5 w-5" />

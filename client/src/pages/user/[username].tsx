@@ -11,8 +11,10 @@ import { useContext } from 'react'
 
 import Avatar from '../../components/Avatar'
 import Button from '../../components/Button'
+import LoadingCircle from '../../components/LoadingCircle'
 import PostList from '../../components/PostList'
 
+import formatAuth0Sub from '../../utils/formatAuth0Sub'
 import { trpc } from '../../utils/trpc'
 import { ssgHelper } from '../../server/ssgHelper'
 import { NotLoggedInModalOpenContext } from '../../utils/context'
@@ -26,13 +28,13 @@ const UserPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 
   const user = trpc.user.getByUsername.useQuery({
     username,
-    auth0Id: auth0User?.sub?.split('|')[1],
+    auth0Id: formatAuth0Sub(auth0User)[1],
   })
   const trpcUtils = trpc.useContext()
   const toggleFollow = trpc.user.toggleFollow.useMutation({
     onSuccess: ({ addedFollow }) => {
       trpcUtils.user.getByUsername.setData(
-        { username, auth0Id: auth0User?.sub?.split('|')[1] },
+        { username, auth0Id: formatAuth0Sub(auth0User)[1] },
         (oldData) => {
           if (oldData == null) return
 
@@ -48,7 +50,12 @@ const UserPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
     },
   })
 
-  if (isLoading || !user.data) return <p>Loading...</p>
+  if (isLoading || !user.data)
+    return (
+      <div className="w-full flex justify-center m-2">
+        <LoadingCircle />
+      </div>
+    )
 
   if (!user?.data) return <ErrorPage statusCode={404} />
 
@@ -75,7 +82,7 @@ const UserPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
           </div>
 
           <div className="m-2">
-            {auth0User?.sub?.split('|')[1] === user.data.auth0Id ? (
+            {formatAuth0Sub(auth0User)[1] === user.data.auth0Id ? (
               <p className="m-2 p-2 border rounded-md">That's You</p>
             ) : (
               <FollowButton
@@ -88,7 +95,7 @@ const UserPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
                   }
 
                   toggleFollow.mutate({
-                    auth0Id: auth0User!.sub!.split('|')[1],
+                    auth0Id: formatAuth0Sub(auth0User)[1],
                     username,
                   })
                 }}
@@ -101,7 +108,7 @@ const UserPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
 
         <Posts
           username={user.data.username}
-          auth0Id={auth0User?.sub?.split('|')[1]}
+          auth0Id={formatAuth0Sub(auth0User)[1]}
         />
       </div>
     </>

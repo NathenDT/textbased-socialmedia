@@ -6,21 +6,28 @@ import type {
   NextPage,
 } from 'next'
 import Head from 'next/head'
-
-import PostItem from '../../components/PostItem'
-import CommentItem from '../../components/CommentItem'
-
-import { trpc } from '../../utils/trpc'
-import { ssgHelper } from '../../server/ssgHelper'
-import CommentForm from '../../components/CommentForm'
 import InfiniteScroll from 'react-infinite-scroll-component'
+
+import CommentForm from '../../components/CommentForm'
+import CommentItem from '../../components/CommentItem'
+import LoadingCircle from '../../components/LoadingCircle'
+import PostItem from '../../components/PostItem'
+
+import formatAuth0Sub from '../../utils/formatAuth0Sub'
+import { ssgHelper } from '../../server/ssgHelper'
+import { trpc } from '../../utils/trpc'
 
 const PostPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   id,
 }) => {
   const { user, isLoading: auth0IsLoading } = useUser()
 
-  if (auth0IsLoading) return <p>Loading...</p>
+  if (auth0IsLoading)
+    return (
+      <div className="w-full m-2 flex justify-center">
+        <LoadingCircle />
+      </div>
+    )
 
   return (
     <>
@@ -29,11 +36,11 @@ const PostPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
       </Head>
 
       <div className="flex flex-col">
-        <Post postId={id} auth0Id={user?.sub?.split('|')[1]} />
+        <Post postId={id} auth0Id={formatAuth0Sub(user)[1]} />
 
-        <p className="m-2 text-2xl">Comments</p>
+        <p className="mx-2 text-2xl">Comments</p>
 
-        <CommentForm postId={id} />
+        {!auth0IsLoading && user && <CommentForm postId={id} />}
 
         <CommentList postId={id} />
       </div>
@@ -70,16 +77,26 @@ function CommentList({ postId }: CommentListProps) {
       { getNextPageParam: (lastPage) => lastPage.nextCursor }
     )
 
-  if (isLoading) return <p>Loading...</p>
+  if (isLoading)
+    return (
+      <div className="w-full flex justify-center m-2">
+        <LoadingCircle />
+      </div>
+    )
 
-  if (!data) return <p>Comments not found</p>
+  if (!data || data.pages.flatMap((page) => page.comments).length === 0)
+    return <p className="m-2 text-2xl">No Comments</p>
 
   return (
     <InfiniteScroll
       dataLength={data.pages.length}
       next={fetchNextPage}
       hasMore={hasNextPage || false}
-      loader={<p>Loading...</p>}
+      loader={
+        <div className="w-full flex justify-center m-2">
+          <LoadingCircle />
+        </div>
+      }
     >
       {data.pages
         .flatMap((page) => page.comments)

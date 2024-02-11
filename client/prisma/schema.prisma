@@ -9,14 +9,14 @@ datasource db {
 }
 
 model Post {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   userId    String
   content   String
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
+  likes     Like[]
+  comments  Comment[]
 
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  likes    Like[]
-  comments Comment[]
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([createdAt, id])
   @@index([userId])
@@ -25,8 +25,9 @@ model Post {
 model Like {
   userId String
   postId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@id([userId, postId])
   @@index([userId])
@@ -39,10 +40,11 @@ model User {
   username  String    @unique
   posts     Post[]
   likes     Like[]
-  followers User[]    @relation(name: "Follow")
-  following User[]    @relation(name: "Follow")
-  createdAt DateTime  @default(now())
   comments  Comment[]
+  createdAt DateTime  @default(now())
+
+  followers User[] @relation(name: "Follow")
+  following User[] @relation(name: "Follow")
 }
 
 model Comment {

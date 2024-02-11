@@ -4,20 +4,21 @@ import { useState } from 'react'
 import Button from './Button'
 import TextArea from './TextArea'
 
-import { trpc } from '../utils/trpc'
 import formatAuth0Sub from '../utils/formatAuth0Sub'
+import { trpc } from '../utils/trpc'
 
 const MAX_POST_LENGTH = 100
 
 export default function PostForm() {
   const { user, isLoading } = useUser()
+
   const trpcUtils = trpc.useContext()
   const { mutate: newPost } = trpc.post.new.useMutation({
     onSuccess: (newPost) => {
       setContent('')
 
       trpcUtils.post.getForYou.setInfiniteData(
-        { auth0Id: user!.sub!.split('|')[1] },
+        { auth0Id: formatAuth0Sub(user)[1] },
         (oldData) => {
           if (oldData == null || oldData.pages[0] == null) return
 
@@ -43,18 +44,14 @@ export default function PostForm() {
     content.replace(/\s/g, '').length <= MAX_POST_LENGTH
 
   const handlePost = () => {
-    const [_, auth0Id] = formatAuth0Sub(user!.sub!)
+    const [_, auth0Id] = formatAuth0Sub(user)
 
     newPost({ auth0Id, content })
   }
 
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
+  if (isLoading) return null
 
-  if (!user) {
-    return null
-  }
+  if (!user) return null
 
   return (
     <div className="flex flex-col m-2 border rounded-md">

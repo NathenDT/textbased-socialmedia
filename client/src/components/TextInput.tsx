@@ -1,5 +1,7 @@
 import React from 'react'
 
+import classNames from '../utils/classNames'
+
 export type TextInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   type?: 'text' | 'password' | 'email' | 'username'
   label?: string
@@ -21,9 +23,12 @@ export default function TextInput({
   ...rest
 }: TextInputProps) {
   return (
-    <div className={'flex flex-col ' + className}>
+    <div className={classNames('flex flex-col', className)}>
       <div
-        className={`flex border rounded-md p-2 ${error && 'border-red-500'}`}
+        className={classNames(
+          'flex border rounded-md p-2',
+          error ? 'border-red-500' : ''
+        )}
       >
         {prefix && <div className="flex items-center">{prefix}</div>}
 
@@ -37,7 +42,9 @@ export default function TextInput({
         {suffix && <div className="flex items-center">{suffix}</div>}
       </div>
 
-      <p className={`text-sm mx-2 ${error && 'text-red-500'}`}>{helperText}</p>
+      <p className={classNames('text-sm mx-2', error ? 'text-red-500' : '')}>
+        {helperText}
+      </p>
     </div>
   )
 }
@@ -57,6 +64,7 @@ export function handleTextChange(
 
     const updatedMoreErrors = (moreErrors ?? []).map((item) => {
       const condition = item.condition(value)
+
       return {
         ...item,
         condition,
